@@ -88,6 +88,21 @@ stef@pop-os:~$ poetry run mpremote cat boot.py
 
 ## run
 
+### blink
+
 ```shell
 mpremote run src/blink.py
+```
+
+### 32x64 lcd panel
+
+```bash
+(esp32hub75-py3.10) stef@pop-os:~/repos_github/esp32-hub75/src$ mpremote cp *.py :
+cp blink.py :
+cp hub75.py :
+Up to date: ./hub75.py
+cp logo.py :
+cp main.py :                            
+cp matrixdata.py :
+(esp32hub75-py3.10) stef@pop-os:~/repos_github/esp32-hub75/src$ mpremote run main.py
 ```
