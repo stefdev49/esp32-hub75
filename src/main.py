@@ -1,10 +1,12 @@
 import hub75
 import matrixdata
+from time import time_ns
 
 ROW_SIZE = 32
 COL_SIZE = 64
 
 config = hub75.Hub75SpiConfiguration()
+config.illumination_time_microseconds = 1
 matrix = matrixdata.MatrixData(ROW_SIZE, COL_SIZE)
 hub75spi = hub75.Hub75Spi(matrix, config)
 
@@ -177,5 +179,14 @@ printat(12, 43, char_0, 7)
 printat(12, 51, char_2, 7)
 printat(12, 58, char_5, 7)
 
+counter = 1
+start = time_ns()
 while True:
     hub75spi.display_data()
+    counter = counter + 1
+    if counter == 100:
+        hub75spi.display_data()
+        end = time_ns()
+        print(f"durée = {(end - start)/(1000000*counter)} ms")
+        counter = 1
+        start = time_ns()
