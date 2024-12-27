@@ -6,7 +6,7 @@ ROW_SIZE = 32
 COL_SIZE = 64
 
 config = hub75.Hub75SpiConfiguration()
-config.illumination_time_microseconds = 1
+config.illumination_time_microseconds = 0
 matrix = matrixdata.MatrixData(ROW_SIZE, COL_SIZE)
 hub75spi = hub75.Hub75Spi(matrix, config)
 
@@ -155,10 +155,7 @@ char_ex = [[0, 0, 0, 0, 0, 0, 0, 0],
 def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
-            if char[i][j] == 1:
-                matrix.set_pixel_value(row+i, col+j, color)
-            else:
-                matrix.set_pixel_value(row+i, col+j, 0)
+            matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
 matrix.clear_all_bytes()
 printat(0, 0, char_b, 7)
@@ -178,6 +175,10 @@ printat(12, 36, char_2, 7)
 printat(12, 43, char_0, 7)
 printat(12, 51, char_2, 7)
 printat(12, 58, char_5, 7)
+
+for col in range(0, 64):
+    matrix.set_pixel_value(30, col, 7)
+    matrix.set_pixel_value(31, col, col % 8)
 
 counter = 1
 start = time_ns()
