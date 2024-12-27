@@ -1,4 +1,5 @@
-from machine import Pin, SoftSPI, freq
+from machine import SoftSPI, freq
+from cached_pin import CachedPin as Pin
 from time import sleep_us
 
 #freq(160000000)  # default NodeMCU ESP-32S v1.1
@@ -94,11 +95,30 @@ class Hub75Spi:
         -------
         None.
         '''
-        self.line_select_a_pin.value(row & 1)
-        self.line_select_b_pin.value(row & 2)
-        self.line_select_c_pin.value(row & 4)
-        self.line_select_d_pin.value(row & 8)
-        self.line_select_e_pin.value(row & 16)
+        if row & 1:
+            self.line_select_a_pin.on()
+        else:
+            self.line_select_a_pin.off()
+
+        if row & 2:
+            self.line_select_b_pin.on()
+        else:
+            self.line_select_b_pin.off()
+
+        if row & 4:
+            self.line_select_c_pin.on()
+        else:
+            self.line_select_c_pin.off()
+
+        if row & 8:
+            self.line_select_d_pin.on()
+        else:
+            self.line_select_d_pin.off()
+
+        if row & 16:
+            self.line_select_e_pin.on()
+        else:
+            self.line_select_e_pin.off()
 
     def display_top_half(self):
         '''
