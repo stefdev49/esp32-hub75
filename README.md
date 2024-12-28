@@ -106,3 +106,24 @@ cp main.py :
 cp matrixdata.py :
 (esp32hub75-py3.10) stef@pop-os:~/repos_github/esp32-hub75/src$ mpremote run main.py
 ```
+
+## HUB75 protocol
+
+The basic operation of the display:
+
+    Select the current row with the pins A, B, C, D
+    Place the corresponding bit for the R1, G1 and B1 channels on the input, then shift it into the display by bringing CLK up and down
+    When the current row is complete, bring LATCH up and down
+
+This lets you display an entire row of data. Repeat this with different values for A/B/C/D and you can shift in an entire bit plane.
+
+1. Clock in data for entire row (use R1,G1,B1,R2,G2,B2 for data and CLK for clock)
+2. OE high
+3. Select line address (A,B,C,D)
+4. LAT high
+5. LAT low
+6. OE low
+
+Repeat for each line
+
+![diagramme](doc/matrix_wave-1.png)
