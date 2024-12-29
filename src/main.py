@@ -180,14 +180,13 @@ for col in range(0, 64):
     matrix.set_pixel_value(30, col, 7)
     matrix.set_pixel_value(31, col, col % 8)
 
-counter = 1
+counter = 0
 start = time_ns()
 while True:
     hub75spi.display_data()
-    counter = counter + 1
+    counter += 1
     if counter == 100:
-        hub75spi.display_data()
         end = time_ns()
         print(f"durée = {(end - start)/(1000000*counter)} ms")
-        counter = 1
+        counter = 0
         start = time_ns()

@@ -1,5 +1,4 @@
-from machine import SoftSPI, freq
-from cached_pin import CachedPin as Pin
+from machine import SoftSPI, freq, Pin
 from time import sleep_us
 
 #freq(160000000)  # default NodeMCU ESP-32S v1.1
@@ -95,30 +94,11 @@ class Hub75Spi:
         -------
         None.
         '''
-        if row & 1:
-            self.line_select_a_pin.on()
-        else:
-            self.line_select_a_pin.off()
-
-        if row & 2:
-            self.line_select_b_pin.on()
-        else:
-            self.line_select_b_pin.off()
-
-        if row & 4:
-            self.line_select_c_pin.on()
-        else:
-            self.line_select_c_pin.off()
-
-        if row & 8:
-            self.line_select_d_pin.on()
-        else:
-            self.line_select_d_pin.off()
-
-        if row & 16:
-            self.line_select_e_pin.on()
-        else:
-            self.line_select_e_pin.off()
+        self.line_select_a_pin.value(row & 1)
+        self.line_select_b_pin.value(row & 2)
+        self.line_select_c_pin.value(row & 4)
+        self.line_select_d_pin.value(row & 8)
+        self.line_select_e_pin.value(row & 16)
 
     def display_top_half(self):
         '''
@@ -207,6 +187,7 @@ class Hub75Spi:
         self.output_enable_pin.on()
         self.latch_pin.on()
         self.latch_pin.off()
+        self.output_enable_pin.off() # enable
 
     def display_data(self):
         '''
@@ -216,5 +197,74 @@ class Hub75Spi:
         -------
         None.
         '''
-        self.display_top_half()
-        self.display_bottom_half()
+        for row in range(self.half_row_size):
+            # shift in data
+            row_data = self.matrix_data.red_matrix_data[row]
+            self.red1_spi.write(row_data)
+            self.red1_mosi_pin.off()
+            self.output_enable_pin.on() # disable
+
+            self.set_row_select(row)
+
+            self.latch_pin.on()
+            self.latch_pin.off()
+            self.output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+
+            # shift in data
+            row_data = self.matrix_data.green_matrix_data[row]
+            self.green1_spi.write(row_data)
+            self.green1_mosi_pin.off()
+            self.output_enable_pin.on() # disable
+            self.latch_pin.on()
+            self.latch_pin.off()
+            self.output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+
+            # shift in data
+            row_data = self.matrix_data.blue_matrix_data[row]
+            self.blue1_spi.write(row_data)
+            self.blue1_mosi_pin.off()
+            self.output_enable_pin.on() # disable
+            self.latch_pin.on()
+            self.latch_pin.off()
+            self.output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+        for row in range(self.half_row_size, self.matrix_data.row_size):
+            # shift in data
+            row_data = self.matrix_data.red_matrix_data[row]
+            self.red2_spi.write(row_data)
+            self.red2_mosi_pin.off()
+            self.output_enable_pin.on() # disable
+
+            self.set_row_select(row % self.half_row_size)
+
+            self.latch_pin.on()
+            self.latch_pin.off()
+            self.output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+
+            row_data = self.matrix_data.green_matrix_data[row]
+            self.green2_spi.write(row_data)
+            self.green2_mosi_pin.off()
+            self.output_enable_pin.on() # disable
+            self.latch_pin.on()
+            self.latch_pin.off()
+            self.output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+
+            row_data = self.matrix_data.blue_matrix_data[row]
+            self.blue2_spi.write(row_data)
+            self.blue2_mosi_pin.off()
+            self.output_enable_pin.on() # disable
+            self.latch_pin.on()
+            self.latch_pin.off()
+            self.output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+
+        # flush out last blue line
+        self.blue2_spi.write(bytearray(self.matrix_data.col_bytes))
+        self.output_enable_pin.on()
+        self.latch_pin.on()
+        self.latch_pin.off()
+        self.output_enable_pin.off() # enable
