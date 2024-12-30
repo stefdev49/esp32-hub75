@@ -21,9 +21,9 @@ class MatrixData:
         self.col_size = col_size
         self.col_bytes = col_size // 8
 
-        self.red_matrix_data = [bytearray(self.col_bytes) for x in range(self.row_size)]
-        self.green_matrix_data = [bytearray(self.col_bytes) for x in range(self.row_size)]
-        self.blue_matrix_data = [bytearray(self.col_bytes) for x in range(self.row_size)]
+        self.red_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
+        self.green_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
+        self.blue_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
 
         self.record_dirty_bytes = record_dirty_bytes
         if self.record_dirty_bytes:
@@ -132,9 +132,9 @@ class MatrixData:
         -------
         None.
         '''
-        self.red_matrix_data = [bytearray(self.col_bytes) for x in range(self.row_size)]
-        self.green_matrix_data = [bytearray(self.col_bytes) for x in range(self.row_size)]
-        self.blue_matrix_data = [bytearray(self.col_bytes) for x in range(self.row_size)]
+        self.red_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
+        self.green_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
+        self.blue_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
 
         if self.record_dirty_bytes:
             self.dirty_bytes_set = set()
