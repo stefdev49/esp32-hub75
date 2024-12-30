@@ -79,10 +79,16 @@ class MatrixData:
 
         if val & RED_VALUE:
             self.red_matrix_data[row][col_byte_index] |= (1 << bit_index)
+        else:
+            self.red_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
         if val & GREEN_VALUE:
             self.green_matrix_data[row][col_byte_index] |= (1 << bit_index)
+        else:
+            self.green_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
         if val & BLUE_VALUE:
             self.blue_matrix_data[row][col_byte_index] |= (1 << bit_index)
+        else:
+            self.blue_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
 
         if self.record_dirty_bytes:
             self.dirty_bytes_set.add((row, col_byte_index))
