@@ -108,10 +108,16 @@ class Hub75Spi:
         -------
         None.
         '''
+        red_matrix_data = self.matrix_data.red_matrix_data
+        green_matrix_data = self.matrix_data.green_matrix_data
+        blue_matrix_data = self.matrix_data.blue_matrix_data
         for row in range(self.half_row_size):
+            row_data_red = red_matrix_data[row]
+            row_data_green = green_matrix_data[row]
+            row_data_blue = blue_matrix_data[row]
+
             # shift in data
-            row_data = self.matrix_data.red_matrix_data[row]
-            self.red1_spi.write(row_data)
+            self.red1_spi.write(row_data_red)
             self.red1_mosi_pin.off()
             self.output_enable_pin.on() # disable
 
@@ -123,8 +129,7 @@ class Hub75Spi:
             sleep_us(self.config.illumination_time_microseconds)
 
             # shift in data
-            row_data = self.matrix_data.green_matrix_data[row]
-            self.green1_spi.write(row_data)
+            self.green1_spi.write(row_data_green)
             self.green1_mosi_pin.off()
             self.output_enable_pin.on() # disable
             self.latch_pin.on()
@@ -133,8 +138,7 @@ class Hub75Spi:
             sleep_us(self.config.illumination_time_microseconds)
 
             # shift in data
-            row_data = self.matrix_data.blue_matrix_data[row]
-            self.blue1_spi.write(row_data)
+            self.blue1_spi.write(row_data_blue)
             self.blue1_mosi_pin.off()
             self.output_enable_pin.on() # disable
             self.latch_pin.on()
@@ -150,10 +154,13 @@ class Hub75Spi:
         -------
         None.
         '''
+        red_matrix_data = self.matrix_data.red_matrix_data
+        green_matrix_data = self.matrix_data.green_matrix_data
+        blue_matrix_data = self.matrix_data.blue_matrix_data
         for row in range(self.half_row_size, self.matrix_data.row_size):
             # shift in data
-            row_data = self.matrix_data.red_matrix_data[row]
-            self.red2_spi.write(row_data)
+            row_data_red = red_matrix_data[row]
+            self.red2_spi.write(row_data_red)
             self.red2_mosi_pin.off()
             self.output_enable_pin.on() # disable
 
@@ -164,8 +171,8 @@ class Hub75Spi:
             self.output_enable_pin.off() # enable
             sleep_us(self.config.illumination_time_microseconds)
 
-            row_data = self.matrix_data.green_matrix_data[row]
-            self.green2_spi.write(row_data)
+            row_data_green = green_matrix_data[row]
+            self.green2_spi.write(row_data_green)
             self.green2_mosi_pin.off()
             self.output_enable_pin.on() # disable
             self.latch_pin.on()
@@ -173,8 +180,8 @@ class Hub75Spi:
             self.output_enable_pin.off() # enable
             sleep_us(self.config.illumination_time_microseconds)
 
-            row_data = self.matrix_data.blue_matrix_data[row]
-            self.blue2_spi.write(row_data)
+            row_data_blue = blue_matrix_data[row]
+            self.blue2_spi.write(row_data_blue)
             self.blue2_mosi_pin.off()
             self.output_enable_pin.on() # disable
             self.latch_pin.on()
