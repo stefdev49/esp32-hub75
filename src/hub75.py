@@ -1,5 +1,6 @@
 from machine import SoftSPI, freq, Pin
 from time import sleep_us
+import micropython
 
 #freq(160000000)  # default NodeMCU ESP-32S v1.1
 freq(240000000)
@@ -195,6 +196,7 @@ class Hub75Spi:
         latch_pin.off()
         output_enable_pin.off() # enable
 
+    @micropython.native
     def display_data(self):
         '''
         Write pixel data to LED matrix.
