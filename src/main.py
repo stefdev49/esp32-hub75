@@ -176,9 +176,9 @@ printat(12, 43, char_0, 7)
 printat(12, 51, char_2, 7)
 printat(12, 58, char_5, 7)
 
-# for col in range(0, 64):
-#     matrix.set_pixel_value(30, col, 7)
-#     matrix.set_pixel_value(31, col, col % 8)
+for col in range(0, 64):
+  matrix.set_pixel_value(30, col, 7)
+  matrix.set_pixel_value(31, col, col % 8)
 
 counter = 0
 start = time_ns()

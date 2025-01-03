@@ -206,6 +206,9 @@ class Hub75Spi:
         red_matrix_data = self.matrix_data.red_matrix_data
         green_matrix_data = self.matrix_data.green_matrix_data
         blue_matrix_data = self.matrix_data.blue_matrix_data
+        red2_matrix_data = red_matrix_data[16:]
+        green2_matrix_data = green_matrix_data[16:]
+        blue2_matrix_data = blue_matrix_data[16:]
         latch_pin = self.latch_pin
         output_enable_pin = self.output_enable_pin
 
@@ -213,6 +216,9 @@ class Hub75Spi:
             row_data_red = red_matrix_data[row]
             row_data_green = green_matrix_data[row]
             row_data_blue = blue_matrix_data[row]
+            row_data_red2 = red2_matrix_data[row]
+            row_data_green2 = green2_matrix_data[row]
+            row_data_blue2 = blue2_matrix_data[row]
 
             # shift in data
             self.red1_spi.write(row_data_red)
@@ -241,38 +247,24 @@ class Hub75Spi:
             latch_pin.off()
             output_enable_pin.off() # enable
     
-        for row in range(self.half_row_size, self.matrix_data.row_size):
             # shift in data
-            row_data_red = red_matrix_data[row]
-            self.red2_spi.write(row_data_red)
+            self.red2_spi.write(row_data_red2)
             self.red2_mosi_pin.off()
             output_enable_pin.on() # disable
-
-            self.set_row_select(row % self.half_row_size)
-
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
 
-            row_data_green = green_matrix_data[row]
-            self.green2_spi.write(row_data_green)
+            self.green2_spi.write(row_data_green2)
             self.green2_mosi_pin.off()
             output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
 
-            row_data_blue = blue_matrix_data[row]
-            self.blue2_spi.write(row_data_blue)
+            self.blue2_spi.write(row_data_blue2)
             self.blue2_mosi_pin.off()
             output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
-
-        # flush out last blue line
-        self.blue2_spi.write(bytearray(self.matrix_data.col_bytes))
-        output_enable_pin.on()
-        latch_pin.on()
-        latch_pin.off()
-        output_enable_pin.off() # enable
