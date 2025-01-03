@@ -26,7 +26,7 @@ Following this [doc](https://docs.micropython.org/en/latest/esp32/tutorial/intro
 ### erase flash
 
 ```shell
-stef@pop-os:~$ poetry run  esptool.py --port /dev/ttyUSB0 erase_flash
+stef@pop-os:~$ poetry run esptool.py --port /dev/ttyUSB0 erase_flash
 esptool.py v4.8.1
 Serial port /dev/ttyUSB0
 Connecting.....

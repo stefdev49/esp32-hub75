@@ -214,7 +214,7 @@ class Hub75Spi:
         latch_pin = self.latch_pin
         output_enable_pin = self.output_enable_pin
 
-        for row in range(self.half_row_size):
+        for row in range(16):
             row_data_red = red_matrix_data[row]
             row_data_green = green_matrix_data[row]
             row_data_blue = blue_matrix_data[row]
