@@ -1,7 +1,6 @@
 from machine import SoftSPI, freq, Pin
 from micropython import const
 import micropython
-from time import sleep_us
 
 #freq(160000000)  # default NodeMCU ESP-32S v1.1
 freq(240000000)
