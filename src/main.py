@@ -183,7 +183,6 @@ for col in range(0, 63):
 async def refresh_display():
     while True:
         await hub75spi.display_data()
-        await asyncio.sleep(0)
 
 async def message_loop():
     col = 0
@@ -192,7 +191,6 @@ async def message_loop():
         col -= 1
         if col < -124:
             col = 0
-        await asyncio.sleep(0)
 
 async def main():
     matrix.clear_all_bytes()
