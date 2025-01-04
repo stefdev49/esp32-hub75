@@ -1,6 +1,9 @@
-BLUE_VALUE = 1
-GREEN_VALUE = 2
-RED_VALUE = 4
+from micropython import const
+import micropython
+
+BLUE_VALUE = const(1)
+GREEN_VALUE = const(2)
+RED_VALUE = const(4)
 
 class MatrixData:
     '''
@@ -51,6 +54,7 @@ class MatrixData:
                 if array[r][c]:
                     self.set_pixel_value(row + r, col + c, array[r][c])
 
+    @micropython.native
     def set_pixel_value(self, row, col, val):
         '''
         Set an individual pixel.
@@ -77,18 +81,20 @@ class MatrixData:
         # => Compute the bit index of the pixel within the byte.
         bit_index = 7 - (col % 8)
 
+        mask : int = 1 << bit_index
+        
         if val & RED_VALUE:
-            self.red_matrix_data[row][col_byte_index] |= (1 << bit_index)
+            self.red_matrix_data[row][col_byte_index] |= mask
         else:
-            self.red_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
+            self.red_matrix_data[row][col_byte_index] &= ~mask
         if val & GREEN_VALUE:
-            self.green_matrix_data[row][col_byte_index] |= (1 << bit_index)
+            self.green_matrix_data[row][col_byte_index] |= mask
         else:
-            self.green_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
+            self.green_matrix_data[row][col_byte_index] &= ~mask
         if val & BLUE_VALUE:
-            self.blue_matrix_data[row][col_byte_index] |= (1 << bit_index)
+            self.blue_matrix_data[row][col_byte_index] |= mask
         else:
-            self.blue_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
+            self.blue_matrix_data[row][col_byte_index] &= ~mask
 
         if self.record_dirty_bytes:
             self.dirty_bytes_set.add((row, col_byte_index))

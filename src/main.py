@@ -2,6 +2,7 @@ import hub75
 import matrixdata
 from time import time_ns
 from machine import Timer
+import micropython
 
 ROW_SIZE = 32
 COL_SIZE = 64
@@ -153,12 +154,13 @@ char_ex = [[0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0]
           ]
 
+@micropython.native
 def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
-
+@micropython.native
 def message(col):
     printat(8, col, char_b, 7)
     printat(8, col+7, char_o, 7)
@@ -176,6 +178,19 @@ def message(col):
     printat(8, col+106, char_5, 7)
     printat(8, col+113, char_ex, 7)
 
+@micropython.native
+def message_loop():
+    col = 0
+    start = time_ns()
+    while True:
+        message(col)
+        col-=1
+        if col == -124:
+            end = time_ns()
+            print(f"durée = {(end - start)/1_000_000_000} s")
+            start = time_ns()
+            col = 0
+
 matrix.clear_all_bytes()
 
 for col in range(64):
@@ -184,14 +199,4 @@ for col in range(64):
 tim0 = Timer(0)
 tim0.init(period=20, mode=Timer.PERIODIC, callback=lambda t: hub75spi.display_data())
 
-col = 0
-start = time_ns()
-while True:
-    message(col)
-    col-=1
-    if col == -124:
-        end = time_ns()
-        print(f"durée = {(end - start)/1_000_000_000} s")
-        counter = 0
-        start = time_ns()
-        col = 0
+message_loop()
