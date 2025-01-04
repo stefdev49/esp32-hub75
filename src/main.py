@@ -1,6 +1,7 @@
 import hub75
 import matrixdata
 from time import time_ns
+import asyncio
 
 ROW_SIZE = 32
 COL_SIZE = 64
@@ -152,42 +153,41 @@ char_ex = [[0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0]
           ]
 
-def printat(row, col, char, color):
+async def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
-def message(col):
-    printat(8, col, char_b, 7)
-    printat(8, col + 7, char_o, 7)
-    printat(8, col+14, char_n, 7)
-    printat(8, col+21, char_n, 7)
-    printat(8, col+28, char_e, 7)
-    printat(8, col+42, char_a, 7)
-    printat(8, col+49, char_n, 7)
-    printat(8, col+56, char_n, 7)
-    printat(8, col+63, char_e, 7)
-    printat(8, col+70, char_ea, 7)
-    printat(8, col+84, char_2, 7)
-    printat(8, col+91, char_0, 7)
-    printat(8, col+99, char_2, 7)
-    printat(8, col+106, char_5, 7)
-    printat(8, col+113, char_ex, 7)
+
+async def message(col):
+    await printat(8, col, char_b, 7)
+    await printat(8, col + 7, char_o, 7)
+    await printat(8, col+14, char_n, 7)
+    await printat(8, col+21, char_n, 7)
+    await printat(8, col+28, char_e, 7)
+    await printat(8, col+42, char_a, 7)
+    await printat(8, col+49, char_n, 7)
+    await printat(8, col+56, char_n, 7)
+    await printat(8, col+63, char_e, 7)
+    await printat(8, col+70, char_ea, 7)
+    await printat(8, col+84, char_2, 7)
+    await printat(8, col+91, char_0, 7)
+    await printat(8, col+99, char_2, 7)
+    await printat(8, col+106, char_5, 7)
+    await printat(8, col+113, char_ex, 7)
 
 matrix.clear_all_bytes()
 for col in range(0, 63):
     matrix.set_pixel_value(31, col, 7)
 
-counter = 0
-col = 0
-start = time_ns()
-while True:
-    message(col)
-    hub75spi.display_data()
-    counter += 1
-    col -=1
-    if counter == 128:
-        end = time_ns()
-        print(f"durée = {(end - start)/(1000000*counter)} ms")
-        counter = 0
-        col = 0
-        start = time_ns()
+async def main():
+    matrix.clear_all_bytes()
+    for col in range(0, 63):
+        matrix.set_pixel_value(31, col, 7)
+    
+    task1 = asyncio.create_task(hub75spi.display_data())
+    task2 = asyncio.create_task(message(0))
+    
+    await task1
+    await task2
+
+asyncio.run(main())
