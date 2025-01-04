@@ -121,7 +121,6 @@ class Hub75Spi:
             self.latch_pin.on()
             self.latch_pin.off()
             self.output_enable_pin.off() # enable
-            sleep_us(self.config.illumination_time_microseconds)
 
             # shift in data
             row_data = self.matrix_data.green_matrix_data[row]
@@ -131,7 +130,6 @@ class Hub75Spi:
             self.latch_pin.on()
             self.latch_pin.off()
             self.output_enable_pin.off() # enable
-            sleep_us(self.config.illumination_time_microseconds)
 
             # shift in data
             row_data = self.matrix_data.blue_matrix_data[row]
@@ -141,7 +139,6 @@ class Hub75Spi:
             self.latch_pin.on()
             self.latch_pin.off()
             self.output_enable_pin.off() # enable
-            sleep_us(self.config.illumination_time_microseconds)
 
     def display_bottom_half(self):
         '''
@@ -163,7 +160,6 @@ class Hub75Spi:
             self.latch_pin.on()
             self.latch_pin.off()
             self.output_enable_pin.off() # enable
-            sleep_us(self.config.illumination_time_microseconds)
 
             row_data = self.matrix_data.green_matrix_data[row]
             self.green2_spi.write(row_data)
@@ -172,7 +168,6 @@ class Hub75Spi:
             self.latch_pin.on()
             self.latch_pin.off()
             self.output_enable_pin.off() # enable
-            sleep_us(self.config.illumination_time_microseconds)
 
             row_data = self.matrix_data.blue_matrix_data[row]
             self.blue2_spi.write(row_data)
@@ -181,7 +176,6 @@ class Hub75Spi:
             self.latch_pin.on()
             self.latch_pin.off()
             self.output_enable_pin.off() # enable
-            sleep_us(self.config.illumination_time_microseconds)
 
         # flush out last blue line
         self.blue2_spi.write(bytearray(self.matrix_data.col_bytes))
