@@ -179,15 +179,29 @@ matrix.clear_all_bytes()
 for col in range(0, 63):
     matrix.set_pixel_value(31, col, 7)
 
+async def refresh_display():
+    while True:
+        await hub75spi.display_data()
+        await asyncio.sleep(0.1)
+
+async def message_loop():
+    col = 0
+    while True:
+        await message(col)
+        col -= 1
+        if col < -124:
+            col = 0
+        await asyncio.sleep(0.1)
+
 async def main():
     matrix.clear_all_bytes()
     for col in range(0, 63):
         matrix.set_pixel_value(31, col, 7)
     
-    task1 = asyncio.create_task(hub75spi.display_data())
-    task2 = asyncio.create_task(message(0))
+    refresh = asyncio.create_task(refresh_display())
+    loop = asyncio.create_task(message_loop())
     
-    await task1
-    await task2
+    await refresh
+    await loop
 
 asyncio.run(main())
