@@ -177,7 +177,7 @@ async def message(col):
     await printat(8, col+113, char_ex, 7)
 
 matrix.clear_all_bytes()
-for col in range(0, 63):
+for col in range(64):
     matrix.set_pixel_value(31, col, 7)
 
 async def refresh_display():
@@ -186,11 +186,15 @@ async def refresh_display():
 
 async def message_loop():
     col = 0
+    start = time_ns()
     while True:
         await message(col)
         col -= 1
         if col < -124:
+            end = time_ns()
+            print(f"Time message_loop(): {(end - start) / 1_000_000_000} seconds")
             col = 0
+            start = time_ns()
 
 async def main():
     matrix.clear_all_bytes()
