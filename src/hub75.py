@@ -101,7 +101,7 @@ class Hub75Spi:
         self.line_select_d_pin.value(row & 8)
         # self.line_select_e_pin.value(row & 16)
 
-    async def display_top_half(self):
+    def display_top_half(self):
         '''
         Write top half of display, see display_data().
 
@@ -143,7 +143,7 @@ class Hub75Spi:
             self.output_enable_pin.off() # enable
             sleep_us(self.config.illumination_time_microseconds)
 
-    async def display_bottom_half(self):
+    def display_bottom_half(self):
         '''
         Write bottom half of display, see display_data().
 
@@ -198,5 +198,6 @@ class Hub75Spi:
         -------
         None.
         '''
-        await self.display_top_half()
-        await self.display_bottom_half()
+        self.display_top_half()
+        self.display_bottom_half()
+        await asyncio.sleep(0)

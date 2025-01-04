@@ -157,6 +157,7 @@ async def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
+    await asyncio.sleep(0)
 
 async def message(col):
     await printat(8, col, char_b, 7)
@@ -167,8 +168,8 @@ async def message(col):
     await printat(8, col+42, char_a, 7)
     await printat(8, col+49, char_n, 7)
     await printat(8, col+56, char_n, 7)
-    await printat(8, col+63, char_e, 7)
-    await printat(8, col+70, char_ea, 7)
+    await printat(8, col+63, char_ea, 7)
+    await printat(8, col+70, char_e, 7)
     await printat(8, col+84, char_2, 7)
     await printat(8, col+91, char_0, 7)
     await printat(8, col+99, char_2, 7)
@@ -182,7 +183,7 @@ for col in range(0, 63):
 async def refresh_display():
     while True:
         await hub75spi.display_data()
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0)
 
 async def message_loop():
     col = 0
@@ -191,7 +192,7 @@ async def message_loop():
         col -= 1
         if col < -124:
             col = 0
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0)
 
 async def main():
     matrix.clear_all_bytes()
