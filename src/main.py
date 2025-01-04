@@ -159,18 +159,17 @@ def printat(row, col, char, color):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
 
-
 def message(col):
     printat(8, col, char_b, 7)
-    printat(8, col + 7, char_o, 7)
+    printat(8, col+7, char_o, 7)
     printat(8, col+14, char_n, 7)
     printat(8, col+21, char_n, 7)
     printat(8, col+28, char_e, 7)
     printat(8, col+42, char_a, 7)
     printat(8, col+49, char_n, 7)
     printat(8, col+56, char_n, 7)
-    printat(8, col+63, char_e, 7)
-    printat(8, col+70, char_ea, 7)
+    printat(8, col+63, char_ea, 7)
+    printat(8, col+70, char_e, 7)
     printat(8, col+84, char_2, 7)
     printat(8, col+91, char_0, 7)
     printat(8, col+99, char_2, 7)
