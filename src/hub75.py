@@ -221,9 +221,12 @@ class Hub75Spi:
         -------
         None.
         '''
-        red_matrix_data = self.matrix_data.red_matrix_data
-        green_matrix_data = self.matrix_data.green_matrix_data
-        blue_matrix_data = self.matrix_data.blue_matrix_data
+        red1_matrix_data = self.matrix_data.red_matrix_data
+        green1_matrix_data = self.matrix_data.green_matrix_data
+        blue1_matrix_data = self.matrix_data.blue_matrix_data
+        red2_matrix_data = self.matrix_data.red_matrix_data[16:]
+        green2_matrix_data = self.matrix_data.green_matrix_data[16:]
+        blue2_matrix_data = self.matrix_data.blue_matrix_data[16:]
 
         output_enable_pin = self.output_enable_pin
         latch_pin = self.latch_pin
@@ -241,11 +244,14 @@ class Hub75Spi:
         green2_mosi_pin = self.green2_mosi_pin
         blue2_spi = self.blue2_spi
         blue2_mosi_pin = self.blue2_mosi_pin
-        
+
         for row in range(self.half_row_size):
-            row_data_red1 = red_matrix_data[row]
-            row_data_green1 = green_matrix_data[row]
-            row_data_blue1 = blue_matrix_data[row]
+            row_data_red1 = red1_matrix_data[row]
+            row_data_green1 = green1_matrix_data[row]
+            row_data_blue1 = blue1_matrix_data[row]
+            row_data_red2 = red2_matrix_data[row]
+            row_data_green2 = green2_matrix_data[row]
+            row_data_blue2 = blue2_matrix_data[row]
 
             # shift in data
             red1_spi.write(row_data_red1)
@@ -274,19 +280,10 @@ class Hub75Spi:
             latch_pin.off()
             output_enable_pin.off() # enable
 
-
-        for row in range(self.half_row_size, self.matrix_data.row_size):
-            row_data_red2 = red_matrix_data[row]
-            row_data_green2 = green_matrix_data[row]
-            row_data_blue2 = blue_matrix_data[row]
-
             # shift in data
             red2_spi.write(row_data_red2)
             red2_mosi_pin.off()
             output_enable_pin.on() # disable
-
-            self.set_row_select(row % self.half_row_size)
-
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
@@ -304,10 +301,3 @@ class Hub75Spi:
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
-
-        # flush out last blue line
-        blue2_spi.write(bytearray(self.matrix_data.col_bytes))
-        output_enable_pin.on()
-        latch_pin.on()
-        latch_pin.off()
-        output_enable_pin.off() # enable
