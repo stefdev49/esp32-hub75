@@ -267,8 +267,23 @@ class Hub75Spi:
             output_enable_pin.off() # enable
 
             # shift in data
+            red2_spi.write(row_data_red2)
+            red2_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+            # shift in data
             green1_spi.write(row_data_green1)
             green1_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+            green2_spi.write(row_data_green2)
+            green2_mosi_pin.off()
             output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()
@@ -277,21 +292,6 @@ class Hub75Spi:
             # shift in data
             blue1_spi.write(row_data_blue1)
             blue1_mosi_pin.off()
-            output_enable_pin.on() # disable
-            latch_pin.on()
-            latch_pin.off()
-            output_enable_pin.off() # enable
-
-            # shift in data
-            red2_spi.write(row_data_red2)
-            red2_mosi_pin.off()
-            output_enable_pin.on() # disable
-            latch_pin.on()
-            latch_pin.off()
-            output_enable_pin.off() # enable
-
-            green2_spi.write(row_data_green2)
-            green2_mosi_pin.off()
             output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()

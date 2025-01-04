@@ -1,9 +1,6 @@
 from micropython import const
 import micropython
 
-BLUE_VALUE = const(1)
-GREEN_VALUE = const(2)
-RED_VALUE = const(4)
 
 class MatrixData:
     '''
@@ -20,9 +17,9 @@ class MatrixData:
         White   0b111         7
     '''
     def __init__(self, row_size, col_size, record_dirty_bytes=True):
-        self.row_size = row_size
-        self.col_size = col_size
-        self.col_bytes = col_size // 8
+        self.row_size = const(row_size)
+        self.col_size = const(col_size)
+        self.col_bytes = const(col_size // 8)
 
         self.red_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
         self.green_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
@@ -83,21 +80,18 @@ class MatrixData:
 
         mask : int = 1 << bit_index
         
-        if val & RED_VALUE:
+        if val & 1:
             self.red_matrix_data[row][col_byte_index] |= mask
         else:
             self.red_matrix_data[row][col_byte_index] &= ~mask
-        if val & GREEN_VALUE:
+        if val & 2:
             self.green_matrix_data[row][col_byte_index] |= mask
         else:
             self.green_matrix_data[row][col_byte_index] &= ~mask
-        if val & BLUE_VALUE:
+        if val & 4:
             self.blue_matrix_data[row][col_byte_index] |= mask
         else:
             self.blue_matrix_data[row][col_byte_index] &= ~mask
-
-        if self.record_dirty_bytes:
-            self.dirty_bytes_set.add((row, col_byte_index))
 
     def is_out_of_bounds(self, row, col):
         '''

@@ -194,6 +194,7 @@ def message_loop():
 matrix.clear_all_bytes()
 
 for col in range(64):
+    matrix.set_pixel_value(30, col, 7)
     matrix.set_pixel_value(31, col, 7)
 
 tim0 = Timer(0)
