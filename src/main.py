@@ -167,8 +167,8 @@ printat(0, 28, char_e, 7)
 printat(0, 42, char_a, 7)
 printat(0, 49, char_n, 7)
 printat(0, 56, char_n, 7)
-printat(12, 0, char_e, 7)
-printat(12, 7, char_ea, 7)
+printat(12, 0, char_ea, 7)
+printat(12, 7, char_e, 7)
 
 printat(12, 21, char_2, 7)
 printat(12, 28, char_0, 7)
@@ -176,7 +176,7 @@ printat(12, 36, char_2, 7)
 printat(12, 43, char_5, 7)
 printat(12, 50, char_ex, 7)
 
-for col in range(0, 63):
+for col in range(64):
     matrix.set_pixel_value(31, col, 7)
 
 counter = 0
