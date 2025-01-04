@@ -156,36 +156,38 @@ def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
+def message(col):
+    printat(8, col, char_b, 7)
+    printat(8, col + 7, char_o, 7)
+    printat(8, col+14, char_n, 7)
+    printat(8, col+21, char_n, 7)
+    printat(8, col+28, char_e, 7)
+    printat(8, col+42, char_a, 7)
+    printat(8, col+49, char_n, 7)
+    printat(8, col+56, char_n, 7)
+    printat(8, col+63, char_e, 7)
+    printat(8, col+70, char_ea, 7)
+    printat(8, col+84, char_2, 7)
+    printat(8, col+91, char_0, 7)
+    printat(8, col+99, char_2, 7)
+    printat(8, col+106, char_5, 7)
+    printat(8, col+113, char_ex, 7)
 
 matrix.clear_all_bytes()
-printat(0, 0, char_b, 7)
-printat(0, 7, char_o, 7)
-printat(0, 14, char_n, 7)
-printat(0, 21, char_n, 7)
-printat(0, 28, char_e, 7)
-
-printat(0, 42, char_a, 7)
-printat(0, 49, char_n, 7)
-printat(0, 56, char_n, 7)
-printat(12, 0, char_e, 7)
-printat(12, 7, char_ea, 7)
-
-printat(12, 21, char_2, 7)
-printat(12, 28, char_0, 7)
-printat(12, 36, char_2, 7)
-printat(12, 43, char_5, 7)
-printat(12, 50, char_ex, 7)
-
 for col in range(0, 63):
     matrix.set_pixel_value(31, col, 7)
 
 counter = 0
+col = 0
 start = time_ns()
 while True:
+    message(col)
     hub75spi.display_data()
     counter += 1
-    if counter == 200:
+    col -=1
+    if counter == 128:
         end = time_ns()
         print(f"durée = {(end - start)/(1000000*counter)} ms")
         counter = 0
+        col = 0
         start = time_ns()
