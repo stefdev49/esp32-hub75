@@ -181,7 +181,7 @@ def message(col):
 
 @micropython.native
 def message_loop(count):
-    col = 0
+    col = 63
     counter = 0
     start = time_ns()
     while counter < count:
@@ -192,7 +192,7 @@ def message_loop(count):
             print(f"durée = {(end - start)/1_000_000_000} s")
             counter += 1
             start = time_ns()
-            col = 0
+            col = 63
 
 matrix.clear_all_bytes()
 
