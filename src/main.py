@@ -156,9 +156,10 @@ char_ex = [[0, 0, 0, 0, 0, 0, 0, 0],
 
 @micropython.native
 def printat(row, col, char, color):
-    for i in range(12):
-        for j in range(8):
-            matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
+    if (col >=0 and col <64) or (col+8 >=0 and col+8 <64):
+        for i in range(12):
+            for j in range(8):
+                matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
 @micropython.native
 def message(col):
@@ -179,15 +180,17 @@ def message(col):
     printat(8, col+113, char_ex, 7)
 
 @micropython.native
-def message_loop():
+def message_loop(count):
     col = 0
+    counter = 0
     start = time_ns()
-    while True:
+    while counter < count:
         message(col)
         col-=1
         if col == -124:
             end = time_ns()
             print(f"durée = {(end - start)/1_000_000_000} s")
+            counter += 1
             start = time_ns()
             col = 0
 
@@ -195,9 +198,8 @@ matrix.clear_all_bytes()
 
 for col in range(64):
     matrix.set_pixel_value(30, col, 7)
-    matrix.set_pixel_value(31, col, 7)
 
 tim0 = Timer(0)
 tim0.init(period=20, mode=Timer.PERIODIC, callback=lambda t: hub75spi.display_data())
 
-message_loop()
+message_loop(2)
