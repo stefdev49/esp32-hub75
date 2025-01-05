@@ -259,17 +259,7 @@ class Hub75Spi:
             red1_spi.write(row_data_red1)
             red1_mosi_pin.off()
             output_enable_pin.on() # disable
-
             self.set_row_select(row)
-
-            latch_pin.on()
-            latch_pin.off()
-            output_enable_pin.off() # enable
-
-            # shift in data
-            red2_spi.write(row_data_red2)
-            red2_mosi_pin.off()
-            output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
@@ -277,13 +267,6 @@ class Hub75Spi:
             # shift in data
             green1_spi.write(row_data_green1)
             green1_mosi_pin.off()
-            output_enable_pin.on() # disable
-            latch_pin.on()
-            latch_pin.off()
-            output_enable_pin.off() # enable
-
-            green2_spi.write(row_data_green2)
-            green2_mosi_pin.off()
             output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()
@@ -297,9 +280,31 @@ class Hub75Spi:
             latch_pin.off()
             output_enable_pin.off() # enable
 
+            # shift in data
+            red2_spi.write(row_data_red2)
+            red2_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+            green2_spi.write(row_data_green2)
+            green2_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
             blue2_spi.write(row_data_blue2)
             blue2_mosi_pin.off()
             output_enable_pin.on() # disable
             latch_pin.on()
             latch_pin.off()
             output_enable_pin.off() # enable
+        
+        # flush out last blue line
+        blue2_spi.write(bytearray(self.matrix_data.col_bytes))
+        output_enable_pin.on()
+        latch_pin.on()
+        latch_pin.off()
+        output_enable_pin.off() # enable
