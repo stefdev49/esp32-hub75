@@ -76,7 +76,7 @@ class MatrixData:
 
         mask : int = 1 << bit_index
         
-        if val & 1:
+        if val & 4:
             self.red_matrix_data[row][col_byte_index] |= mask
         else:
             self.red_matrix_data[row][col_byte_index] &= ~mask
@@ -84,7 +84,7 @@ class MatrixData:
             self.green_matrix_data[row][col_byte_index] |= mask
         else:
             self.green_matrix_data[row][col_byte_index] &= ~mask
-        if val & 4:
+        if val & 1:
             self.blue_matrix_data[row][col_byte_index] |= mask
         else:
             self.blue_matrix_data[row][col_byte_index] &= ~mask
