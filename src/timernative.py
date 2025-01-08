@@ -1,6 +1,6 @@
 from machine import Timer
 import micropython
-from time import time_ns
+from time import time_ns, sleep_us
 
 @micropython.native
 def isr():
@@ -12,7 +12,7 @@ def isr():
 def long_lived_function():
     start = time_ns()
     while time_ns() - start < 2_000_000_000:
-        pass
+        sleep_us(156)
 
 # launch timer interrupt every 500 ms
 tim0 = Timer(0)
