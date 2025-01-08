@@ -3,6 +3,7 @@ import matrixdata
 from time import time_ns
 from machine import Timer
 import micropython
+import logo
 
 ROW_SIZE = 32
 COL_SIZE = 64
@@ -196,10 +197,15 @@ def message_loop(count):
 
 matrix.clear_all_bytes()
 
-for col in range(64):
-    matrix.set_pixel_value(31, col, 7)
+for i in range(32):
+    for j in range(32):
+        matrix.set_pixel_value(i, j+16, logo.logo[i][j])
 
 tim0 = Timer(0)
 tim0.init(period=20, mode=Timer.PERIODIC, callback=lambda t: hub75spi.display_data())
 
 message_loop(2)
+
+for i in range(32):
+    for j in range(32):
+        matrix.set_pixel_value(i, j+16, logo.logo[i][j])
