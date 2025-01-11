@@ -128,12 +128,13 @@ class Hub75Spi:
             row_data_green1 = green_matrix_data[row]
             row_data_blue1 = blue_matrix_data[row]
 
+            output_enable_pin.on() # disable
+            self.set_row_select(row)
+            
             # shift in data
             red1_spi.write(row_data_red1)
             red1_mosi_pin.off()
-            output_enable_pin.on() # disable
 
-            self.set_row_select(row)
 
             latch_pin.on()
             latch_pin.off()
