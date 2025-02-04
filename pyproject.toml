@@ -9,6 +9,7 @@ packages = [{include = "src", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+pytest = "^8.3.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -18,3 +19,5 @@ esptool = "^4.8.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
