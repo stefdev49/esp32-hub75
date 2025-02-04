@@ -179,8 +179,11 @@ matrix.clear_all_bytes()
 counter = 0
 start = time_ns()
 
+scroll = 0
 while True:
     for i in range(0, len(sequence)):
-        if i*7 < COL_SIZE:
-            printat(8, i*7, sequence[i], 255)
+        if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
+            printat(8, scroll+i*7, sequence[i], 255)
+            hub75spi.display_data()
+    scroll -= 1
     hub75spi.display_data()
