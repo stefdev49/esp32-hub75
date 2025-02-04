@@ -153,37 +153,34 @@ char_ex = [[0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0]
           ]
 
+char_space = [[0, 0, 0, 0, 0, 0, 0, 0], 
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
+
 def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
+# create sequence holding the displayed chars
+sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_e, char_ea, char_space, char_2, char_0, char_2, char_5, char_ex]
+
 matrix.clear_all_bytes()
-printat(0, 0, char_b, 7)
-printat(0, 7, char_o, 7)
-printat(0, 14, char_n, 7)
-printat(0, 21, char_n, 7)
-printat(0, 28, char_e, 7)
-
-printat(0, 42, char_a, 7)
-printat(0, 49, char_n, 7)
-printat(0, 56, char_n, 7)
-printat(12, 0, char_e, 7)
-printat(12, 7, char_ea, 7)
-
-printat(12, 21, char_2, 7)
-printat(12, 28, char_0, 7)
-printat(12, 36, char_2, 7)
-printat(12, 43, char_5, 7)
-printat(12, 50, char_ex, 7)
-
 counter = 0
 start = time_ns()
+
 while True:
+    for i in range(0, len(sequence)):
+        if i*7 < COL_SIZE:
+            printat(8, i*7, sequence[i], 255)
     hub75spi.display_data()
-    counter += 1
-    if counter == 200:
-        end = time_ns()
-        print(f"durée = {(end - start)/(1000000*counter)} ms")
-        counter = 0
-        start = time_ns()
