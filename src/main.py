@@ -1,5 +1,6 @@
 import hub75
 import matrixdata
+import logo
 from time import time_ns
 
 ROW_SIZE = 32
@@ -176,8 +177,10 @@ printat(12, 36, char_2, 7)
 printat(12, 43, char_5, 7)
 printat(12, 50, char_ex, 7)
 
-for col in range(0, 63):
-    matrix.set_pixel_value(31, col, 7)
+matrix.clear_all_bytes()
+for i in range(31):
+    for j in range(31):
+        matrix.set_pixel_value(i, j+16, logo.logo[i][j])
 
 counter = 0
 start = time_ns()
