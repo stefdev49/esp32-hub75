@@ -127,6 +127,20 @@ char_2 = [[0, 0, 0, 0, 0, 0, 0, 0],
 
 char_5 = [[0, 0, 0, 0, 0, 0, 0, 0], 
           [0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 1, 1, 1, 1, 0, 0, 0],
+          [1, 1, 0, 0, 1, 1, 0, 0],
+          [1, 1, 0, 0, 1, 1, 0, 0],
+          [1, 1, 0, 0, 0, 0, 0, 0],
+          [1, 1, 1, 1, 1, 0, 0, 0],
+          [1, 1, 0, 0, 1, 1, 0, 0],
+          [1, 1, 0, 0, 1, 1, 0, 0],
+          [1, 1, 0, 0, 1, 1, 0, 0],
+          [0, 1, 1, 1, 1, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
+
+char_6 = [[0, 0, 0, 0, 0, 0, 0, 0], 
+          [0, 0, 0, 0, 0, 0, 0, 0],
           [1, 1, 1, 1, 1, 1, 0, 0],
           [1, 1, 0, 0, 0, 0, 0, 0],
           [1, 1, 0, 0, 0, 0, 0, 0],
@@ -138,6 +152,7 @@ char_5 = [[0, 0, 0, 0, 0, 0, 0, 0],
           [0, 1, 1, 1, 1, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0]
           ]
+
 
 char_ex = [[0, 0, 0, 0, 0, 0, 0, 0], 
           [0, 1, 1, 0, 0, 0, 0, 0],
@@ -172,15 +187,12 @@ def printat(row, col, char, color):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
-# create sequence holding the displayed chars
 sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_e, char_ea, char_space, char_2, char_0, char_2, char_5, char_ex]
 
+len = len(sequence)*7
+scroll = COL_SIZE
 matrix.clear_all_bytes()
-counter = 0
-start = time_ns()
-
-scroll = 0
-while True:
+while scroll != - len:
     for i in range(0, len(sequence)):
         if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
             printat(8, scroll+i*7, sequence[i], 255)
