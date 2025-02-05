@@ -218,5 +218,97 @@ class Hub75Spi:
         -------
         None.
         '''
-        self.display_top_half()
-        self.display_bottom_half()
+        red_matrix_data = self.matrix_data.red_matrix_data
+        green_matrix_data = self.matrix_data.green_matrix_data
+        blue_matrix_data = self.matrix_data.blue_matrix_data
+
+        red1_spi = self.red1_spi
+        green1_spi = self.green1_spi
+        blue1_spi = self.blue1_spi
+        red1_mosi_pin = self.red1_mosi_pin
+        green1_mosi_pin = self.green1_mosi_pin
+        blue1_mosi_pin = self.blue1_mosi_pin
+        latch_pin = self.latch_pin
+        output_enable_pin = self.output_enable_pin
+
+        for row in range(self.half_row_size):
+            # shift in data
+            row_data = red_matrix_data[row]
+            red1_spi.write(row_data)
+            red1_mosi_pin.off()
+            output_enable_pin.on() # disable
+
+            self.line_select_a_pin.value(row & 1)
+            self.line_select_b_pin.value(row & 2)
+            self.line_select_c_pin.value(row & 4)
+            self.line_select_d_pin.value(row & 8)
+
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+            # shift in data
+            row_data = green_matrix_data[row]
+            green1_spi.write(row_data)
+            green1_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+            # shift in data
+            row_data = blue_matrix_data[row]
+            blue1_spi.write(row_data)
+            blue1_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+
+        red2_spi = self.red2_spi
+        green2_spi = self.green2_spi
+        blue2_spi = self.blue2_spi
+        red2_mosi_pin = self.red2_mosi_pin
+        green2_mosi_pin = self.green2_mosi_pin
+        blue2_mosi_pin = self.blue2_mosi_pin
+
+        for row in range(self.half_row_size, self.matrix_data.row_size):
+            # shift in data
+            row_data = red_matrix_data[row]
+            red2_spi.write(row_data)
+            red2_mosi_pin.off()
+            output_enable_pin.on() # disable
+
+            self.line_select_a_pin.value(row & 1)
+            self.line_select_b_pin.value(row & 2)
+            self.line_select_c_pin.value(row & 4)
+            self.line_select_d_pin.value(row & 8)
+
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+            sleep_us(self.config.illumination_time_microseconds)
+
+            row_data = green_matrix_data[row]
+            green2_spi.write(row_data)
+            green2_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+            row_data = blue_matrix_data[row]
+            blue2_spi.write(row_data)
+            blue2_mosi_pin.off()
+            output_enable_pin.on() # disable
+            latch_pin.on()
+            latch_pin.off()
+            output_enable_pin.off() # enable
+
+        # flush out last blue line
+        blue2_spi.write(bytearray(self.matrix_data.col_bytes))
+        output_enable_pin.on()
+        latch_pin.on()
+        latch_pin.off()
+        output_enable_pin.off() # enable           
