@@ -207,5 +207,5 @@ def message_loop():
 
 if __name__ == "__main__":
     timer = Timer(0)
-    timer.init(period=20, mode=Timer.PERIODIC, callback=lambda t: hub75spi.display_data())
+    timer.init(period=20, mode=Timer.PERIODIC, callback=hub75spi.display_data)
     message_loop()
