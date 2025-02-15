@@ -190,22 +190,19 @@ def printat(row, col, char, color):
 sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_ea, char_e, char_space, char_2, char_0, char_2, char_5, char_ex]
 
 matrix.clear_all_bytes()
-for i in range(0, len(sequence)):
-    if i*7 < COL_SIZE:
-        printat(8, i*7, sequence[i], 255)
 
-sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_ea, char_e, char_space, char_2, char_0, char_2, char_5, char_ex]
+def message_loop():
+    pixels = len(sequence)*7
+    scroll = COL_SIZE
+    matrix.clear_all_bytes()
+    while scroll != - pixels:
+        start = time_ns()
+        for i in range(0, len(sequence)):
+            if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
+                printat(8, scroll+i*7, sequence[i], 255)
+        scroll -= 1
+        end = time_ns()
+        print(f"durée = {(end - start)/(1_000_000)} ms")
 
-pixels = len(sequence)*7
-scroll = COL_SIZE
-matrix.clear_all_bytes()
-while scroll != - pixels:
-    start = time_ns()
-    for i in range(0, len(sequence)):
-        if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
-            printat(8, scroll+i*7, sequence[i], 255)
-            hub75spi.display_data()
-    scroll -= 1
-    hub75spi.display_data()
-    end = time_ns()
-    print(f"durée = {(end - start)/(1_000_000)} ms")
+if __name__ == "__main__":
+    message_loop()
