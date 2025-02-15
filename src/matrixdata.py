@@ -68,27 +68,27 @@ class MatrixData:
         -------
         None.
         '''
-        if (self.is_out_of_bounds(row, col)):
+        if (row < 0 or row >= self.row_size or col < 0 or col >= self.col_size):
             return
 
         # One row is divided into col_size // 8 = 8 bytes.
         # => Compute the column index (i.e. byte) of the pixel.
         col_byte_index = col >> 3
         # => Compute the bit index of the pixel within the byte.
-        bit_index = 7 - (col % 8)
+        bit_mask = 1 << (7 - (col % 8))
 
         if val & RED_VALUE:
-            self.red_matrix_data[row][col_byte_index] |= (1 << bit_index)
+            self.red_matrix_data[row][col_byte_index] |= bit_mask
         else:
-            self.red_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
+            self.red_matrix_data[row][col_byte_index] &= ~bit_mask
         if val & GREEN_VALUE:
-            self.green_matrix_data[row][col_byte_index] |= (1 << bit_index)
+            self.green_matrix_data[row][col_byte_index] |= bit_mask
         else:
-            self.green_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
+            self.green_matrix_data[row][col_byte_index] &= ~bit_mask
         if val & BLUE_VALUE:
-            self.blue_matrix_data[row][col_byte_index] |= (1 << bit_index)
+            self.blue_matrix_data[row][col_byte_index] |= bit_mask
         else:
-            self.blue_matrix_data[row][col_byte_index] &= ~(1 << bit_index)
+            self.blue_matrix_data[row][col_byte_index] &= ~bit_mask
 
     def is_out_of_bounds(self, row, col):
         '''
