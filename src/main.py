@@ -2,6 +2,7 @@ import hub75
 import matrixdata
 import logo
 from time import time_ns
+from machine import Timer
 
 ROW_SIZE = 32
 COL_SIZE = 64
@@ -205,4 +206,6 @@ def message_loop():
         print(f"durée = {(end - start)/(1_000_000)} ms")
 
 if __name__ == "__main__":
+    timer = Timer(0)
+    timer.init(period=20, mode=Timer.PERIODIC, callback=lambda t: hub75spi.display_data())
     message_loop()
