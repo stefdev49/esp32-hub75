@@ -193,14 +193,19 @@ sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, 
 matrix.clear_all_bytes()
 
 def message_loop():
-    pixels = len(sequence)*7
+    CHAR_WIDTH= const(7)
+    pixels = len(sequence)*CHAR_WIDTH
     scroll = 0 #COL_SIZE
-    matrix.clear_all_bytes()
+    base_row = const(8)
     while scroll != - pixels:
         start = time_ns()
-        for i in range(0, len(sequence)):
-            if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
-                printat(8, scroll+i*7, sequence[i], 255)
+        # ajoute i et la position calculée au sein d'un tuple si la position est visible
+        visible_chars = [(i, scroll + i * CHAR_WIDTH) 
+                for i in range(len(sequence))
+                if 0 <= scroll + i * CHAR_WIDTH or scroll + i * CHAR_WIDTH < COL_SIZE]
+        for i, pos in visible_chars:
+            printat(base_row, pos, sequence[i], 255)
+        
         scroll -= 1
         end = time_ns()
         print(f"durée = {(end - start)/(1_000_000)} ms")
