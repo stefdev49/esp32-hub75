@@ -194,7 +194,7 @@ matrix.clear_all_bytes()
 
 def message_loop():
     pixels = len(sequence)*7
-    scroll = COL_SIZE
+    scroll = 0 #COL_SIZE
     matrix.clear_all_bytes()
     while scroll != - pixels:
         start = time_ns()
@@ -208,4 +208,7 @@ def message_loop():
 if __name__ == "__main__":
     timer = Timer(0)
     timer.init(period=20, mode=Timer.PERIODIC, callback=hub75spi.display_data)
+    prog_start = time_ns()
     message_loop()
+    prog_end = time_ns()
+    print(f"durée totale = {(prog_end - prog_start)/(1_000_000)} ms")
