@@ -1,11 +1,12 @@
 import hub75
 import matrixdata
 import logo
-from time import time_ns
-from machine import Timer
+from time import time_ns, sleep_ms
+from machine import Timer 
 
 ROW_SIZE = 32
 COL_SIZE = 64
+BUFFER_SIZE = 256
 
 config = hub75.Hub75SpiConfiguration()
 config.illumination_time_microseconds = 0
@@ -192,28 +193,19 @@ sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, 
 
 matrix.clear_all_bytes()
 
-def message_loop():
-    CHAR_WIDTH= const(7)
-    pixels = len(sequence)*CHAR_WIDTH
-    scroll = 0 #COL_SIZE
-    base_row = const(8)
-    while scroll != - pixels:
-        start = time_ns()
-        # ajoute i et la position calculée au sein d'un tuple si la position est visible
-        visible_chars = [(i, scroll + i * CHAR_WIDTH) 
-                for i in range(len(sequence))
-                if 0 <= scroll + i * CHAR_WIDTH or scroll + i * CHAR_WIDTH < COL_SIZE]
-        for i, pos in visible_chars:
-            printat(base_row, pos, sequence[i], 255)
-        
-        scroll -= 1
-        end = time_ns()
-        print(f"durée = {(end - start)/(1_000_000)} ms")
+def prepare_buffer():
+    CHAR_WIDTH = 7
+    for i in range(len(sequence)):
+        printat(8, i * CHAR_WIDTH, sequence[i], 255)
 
 if __name__ == "__main__":
+    prepare_buffer()
     timer = Timer(0)
     timer.init(period=20, mode=Timer.PERIODIC, callback=hub75spi.display_data)
+    offset = 0
     prog_start = time_ns()
-    message_loop()
+    while offset < BUFFER_SIZE - COL_SIZE:
+        sleep_ms(10)
+        offset += 1
     prog_end = time_ns()
     print(f"durée totale = {(prog_end - prog_start)/(1_000_000)} ms")
