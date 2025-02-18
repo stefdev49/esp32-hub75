@@ -10,7 +10,7 @@ BUFFER_SIZE = 256
 
 config = hub75.Hub75SpiConfiguration()
 config.illumination_time_microseconds = 0
-matrix = matrixdata.MatrixData(ROW_SIZE, COL_SIZE)
+matrix = matrixdata.MatrixData(ROW_SIZE, COL_SIZE, BUFFER_SIZE)
 hub75spi = hub75.Hub75Spi(matrix, config)
 
 matrix.clear_all_bytes()
@@ -191,21 +191,21 @@ def printat(row, col, char, color):
 
 sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_ea, char_e, char_space, char_2, char_0, char_2, char_5, char_ex]
 
-matrix.clear_all_bytes()
 
 def prepare_buffer():
+    matrix.clear_all_bytes()
     CHAR_WIDTH = 7
     for i in range(len(sequence)):
-        printat(8, i * CHAR_WIDTH, sequence[i], 255)
+        printat(8, COL_SIZE + i * CHAR_WIDTH, sequence[i], 255)
 
 if __name__ == "__main__":
     prepare_buffer()
-    timer = Timer(0)
-    timer.init(period=20, mode=Timer.PERIODIC, callback=hub75spi.display_data)
+
     offset = 0
     prog_start = time_ns()
     while offset < BUFFER_SIZE - COL_SIZE:
-        sleep_ms(10)
+        hub75spi.offset = offset
+        hub75spi.display_data(0)
         offset += 1
     prog_end = time_ns()
     print(f"durée totale = {(prog_end - prog_start)/(1_000_000)} ms")

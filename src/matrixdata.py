@@ -16,18 +16,16 @@ class MatrixData:
         Yellow  0b110         6
         White   0b111         7
     '''
-    def __init__(self, row_size, col_size, record_dirty_bytes=True):
+    def __init__(self, row_size, col_size, buffer_size):
         self.row_size = row_size
         self.col_size = col_size
         self.col_bytes = col_size // 8
+        self.buffer_size = buffer_size
+        self.buffer_bytes = buffer_size // 8
 
-        self.red_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
-        self.green_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
-        self.blue_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
-
-        self.record_dirty_bytes = record_dirty_bytes
-        if self.record_dirty_bytes:
-            self.dirty_bytes_set = set()
+        self.red_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
+        self.green_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
+        self.blue_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
 
     def set_pixels(self, row, col, array):
         '''
@@ -68,7 +66,7 @@ class MatrixData:
         -------
         None.
         '''
-        if (row < 0 or row >= self.row_size or col < 0 or col >= self.col_size):
+        if (row < 0 or row >= self.row_size or col < 0 or col >= self.buffer_size):
             return
 
         # One row is divided into col_size // 8 = 8 bytes.
@@ -108,24 +106,6 @@ class MatrixData:
         '''
         return (row < 0 or row >= self.row_size or col < 0 or col >= self.col_size)
 
-    def clear_dirty_bytes(self):
-        '''
-        Reset dirty pixels. This is only valid when record_dirty_bytes is set to True.
-
-        Returns
-        -------
-        None.
-        '''
-        
-        if not self.record_dirty_bytes:
-            return
-        
-        for row, col in self.dirty_bytes_set:
-            self.red_matrix_data[row][col] = 0
-            self.green_matrix_data[row][col] = 0
-            self.blue_matrix_data[row][col] = 0
-
-        self.dirty_bytes_set = set()
 
     def clear_all_bytes(self):
         '''
@@ -135,10 +115,8 @@ class MatrixData:
         -------
         None.
         '''
-        self.red_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
-        self.green_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
-        self.blue_matrix_data = [bytearray(self.col_bytes) for _ in range(self.row_size)]
+        self.red_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
+        self.green_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
+        self.blue_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
 
-        if self.record_dirty_bytes:
-            self.dirty_bytes_set = set()
 
