@@ -1,5 +1,6 @@
 import hub75
 import matrixdata
+from logo import logo
 from time import time_ns, sleep_ms
 
 ROW_SIZE = 32
@@ -195,6 +196,10 @@ def prepare_buffers(matrixes):
     BYTE_WIDTH = BUFFER_SIZE // 8
     for i in range(len(sequence)):
         printat(8, COL_SIZE + i * CHAR_WIDTH, sequence[i], 255)
+
+    matrix.set_pixels(0, 16, logo)
+    matrix.set_pixels(0, 256-32-16, logo)
+
     matrixes.append(matrix)
 
     for i in range(1, 8):
@@ -225,13 +230,16 @@ if __name__ == "__main__":
     matrixes = []
     prepare_buffers(matrixes)
 
-    offset = 0
-    prog_start = time_ns()
-    while offset < BUFFER_SIZE - COL_SIZE:
-        hub75spi.offset = offset
-        hub75spi.matrix_data = matrixes [offset % 8]
-        hub75spi.display_data(offset)
-        sleep_ms(20)
-        offset += 1
-    prog_end = time_ns()
-    print(f"durée totale = {(prog_end - prog_start)/(1_000_000)} ms")
+    while True:
+        offset = 0
+        prog_start = time_ns()
+        while offset < BUFFER_SIZE - COL_SIZE:
+            hub75spi.offset = offset
+            hub75spi.matrix_data = matrixes [offset % 8]
+            hub75spi.display_data(offset)
+            sleep_ms(10)
+            hub75spi.display_data(offset)
+            sleep_ms(10)
+            offset += 1
+        prog_end = time_ns()
+        print(f"durée totale = {(prog_end - prog_start)/(1_000_000)} ms")
