@@ -118,5 +118,3 @@ class MatrixData:
         self.red_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
         self.green_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
         self.blue_matrix_data = [bytearray(self.buffer_bytes) for _ in range(self.row_size)]
-
-

@@ -110,7 +110,6 @@ class Hub75Spi:
         '''
         start = self.offset // 8
         end = start + self.matrix_data.col_bytes
-        print(start, end)
         red_matrix_data = self.matrix_data.red_matrix_data
         green_matrix_data = self.matrix_data.green_matrix_data
         blue_matrix_data = self.matrix_data.blue_matrix_data
