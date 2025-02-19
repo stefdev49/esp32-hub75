@@ -188,7 +188,7 @@ def printat(row, col, char, color):
         for j in range(8):
             matrix.set_pixel_value(row+i, col+j, char[i][j] * color)
 
-sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_ea, char_e, char_space, char_2, char_0, char_2, char_5, char_ex]
+sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, char_n, char_ea, char_e, char_space, char_2, char_0, char_2, char_6, char_ex]
 
 
 def prepare_buffers(matrixes):
