@@ -15,14 +15,14 @@ class Hub75SpiConfiguration:
 
         self.illumination_time_microseconds = 10
 
-        # Row select pins
+        # Row select GPIO pins
         self.line_select_a_pin_number = 5
         self.line_select_b_pin_number = 18
         self.line_select_c_pin_number = 19
         self.line_select_d_pin_number = 21
         self.line_select_e_pin_number = 12
 
-        # Hub75 RGB data pins
+        # Hub75 RGB data GPIO pins
         self.red1_pin_number = 2
         self.blue1_pin_number = 15
         self.green1_pin_number = 4
@@ -32,7 +32,7 @@ class Hub75SpiConfiguration:
 
         self.clock_pin_number = 22
         self.latch_pin_number = 26
-        self.output_enable_pin_number = 25  # active low
+        self.output_enable_pin_number = 25
 
         self.spi_miso_pin_number = 13  # not connected
 
