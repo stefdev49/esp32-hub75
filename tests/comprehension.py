@@ -203,3 +203,13 @@ def message_loop_comprehension():
          if scroll+i*7 < COL_SIZE or scroll+i*7 > 0]
         scroll -= 1
 
+def message_loop_opt():
+    pixels = len(sequence)*7
+    scroll = 0
+    matrix.clear_all_bytes()
+    while scroll != - pixels:
+        for i in range(0, len(sequence)):
+            val = scroll+i*7
+            if val < COL_SIZE or val > 0:
+                printat(8, val, sequence[i], 255)
+        scroll -= 1

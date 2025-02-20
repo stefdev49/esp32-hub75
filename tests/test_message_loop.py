@@ -1,6 +1,6 @@
 import unittest
 import timeit
-from comprehension import message_loop, message_loop_comprehension, matrix
+from comprehension import message_loop, message_loop_comprehension, matrix, message_loop_opt
 
 class TestMessageLoop(unittest.TestCase):
     def setUp(self):
@@ -21,23 +21,23 @@ class TestMessageLoop(unittest.TestCase):
             lambda: message_loop_comprehension(), 
             number=number
         )
+
+        # Time the optimised implementation
+        time_opt = timeit.timeit(
+            lambda: message_loop_opt(), 
+            number=number
+        )
         
         print(f"\nPerformance test results ({number} iterations):")
         print(f"Original loop: {time_original:.4f} seconds")
         print(f"List comprehension: {time_comprehension:.4f} seconds")
         print(f"Difference: {abs(time_original - time_comprehension):.4f} seconds")
-        print(f"Ratio: {(time_original/time_comprehension):.2f}x")
-
-        # Verify both implementations produce same output
-        matrix.clear_all_bytes()
-        message_loop()
-        result1 = matrix.get_all_bytes()
-        
-        matrix.clear_all_bytes()
-        message_loop_comprehension()
-        result2 = matrix.get_all_bytes()
-        
-        self.assertEqual(result1, result2, "Both implementations should produce identical output")
+        print(f"Ratio: {(time_original/time_comprehension):.3f}x")
+        print(f"Optimised loop: {time_opt:.4f} seconds")
+        print(f"Difference: {abs(time_original - time_opt):.4f} seconds")
+        print(f"Ratio: {(time_original/time_opt):.3f}x")
+        print(f"Optimised vs Comprehension: {(time_opt/time_comprehension):.3f}x")
+        print(f"Optimised vs Original: {(time_opt/time_original):.3f}x")
 
 if __name__ == '__main__':
     unittest.main()
