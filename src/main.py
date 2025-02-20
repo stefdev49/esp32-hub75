@@ -15,6 +15,10 @@ hub75spi = hub75.Hub75Spi(matrix, config)
 
 matrix.clear_all_bytes()
 
+shadow = matrixdata.MatrixData(ROW_SIZE, COL_SIZE, COL_SIZE)
+shadow.clear_all_bytes()
+shadow.set_pixels(0, 16, logo)
+
 def printat(row, col, char, color):
     for i in range(12):
         for j in range(8):
@@ -63,11 +67,11 @@ if __name__ == "__main__":
         offset = 0
         prog_start = time_ns()
         while offset < BUFFER_SIZE - COL_SIZE:
-            hub75spi.offset = offset
             hub75spi.matrix_data = matrixes [offset % 8]
             hub75spi.display_data(offset)
-            sleep_ms(10)
             hub75spi.display_data(offset)
+            hub75spi.matrix_data = shadow
+            hub75spi.display_data(0)
             sleep_ms(10)
             offset += 1
         prog_end = time_ns()

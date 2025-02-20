@@ -88,24 +88,6 @@ class MatrixData:
         else:
             self.blue_matrix_data[row][col_byte_index] &= ~bit_mask
 
-    def is_out_of_bounds(self, row, col):
-        '''
-        Check if a pixel is out of LED matrix bounds.
-
-        Parameters
-        ----------
-        row : int
-            Row value of pixel (y value).
-        col : int
-            Column value of pixel (x value).
-
-        Returns
-        -------
-        bool
-            Pixel is out of bounds?
-        '''
-        return (row < 0 or row >= self.row_size or col < 0 or col >= self.col_size)
-
 
     def clear_all_bytes(self):
         '''

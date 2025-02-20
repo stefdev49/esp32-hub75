@@ -100,7 +100,7 @@ class Hub75Spi:
         self.line_select_c_pin.value(row & 4)
         self.line_select_d_pin.value(row & 8)
 
-    def display_data(self, t):
+    def display_data(self, offset):
         '''
         Write pixel data to LED matrix.
 
@@ -108,7 +108,7 @@ class Hub75Spi:
         -------
         None.
         '''
-        start = self.offset // 8
+        start = offset // 8
         end = start + self.matrix_data.col_bytes
         red_matrix_data = self.matrix_data.red_matrix_data
         green_matrix_data = self.matrix_data.green_matrix_data
@@ -198,4 +198,4 @@ class Hub75Spi:
         output_enable_pin.on()
         latch_pin.on()
         latch_pin.off()
-        output_enable_pin.off() # enable           
+        output_enable_pin.off() # enable
