@@ -11,7 +11,7 @@ class Hub75SpiConfiguration:
     (https://hackerboxes.com/collections/past-hackerboxes/products/hackerbox-0065-realtime).
     '''
     def __init__(self):
-        self.spi_baud_rate = 2500000
+        self.spi_baud_rate = 5000000
 
         self.illumination_time_microseconds = 10
 
@@ -32,7 +32,7 @@ class Hub75SpiConfiguration:
 
         self.clock_pin_number = 22
         self.latch_pin_number = 26
-        self.output_enable_pin_number = 25
+        self.output_disable_pin_number = 25
 
         self.spi_miso_pin_number = 13  # not connected
 
@@ -54,13 +54,13 @@ class Hub75Spi:
         self.half_row_size = matrix_data.row_size // 2
         self.offset = 0
 
-        self.latch_pin = Pin(config.latch_pin_number, Pin.OUT)
-        self.output_enable_pin = Pin(config.output_enable_pin_number, Pin.OUT)
-        self.line_select_a_pin = Pin(config.line_select_a_pin_number, Pin.OUT)
-        self.line_select_b_pin = Pin(config.line_select_b_pin_number, Pin.OUT)
-        self.line_select_c_pin = Pin(config.line_select_c_pin_number, Pin.OUT)
-        self.line_select_d_pin = Pin(config.line_select_d_pin_number, Pin.OUT)
-        self.line_select_e_pin = Pin(config.line_select_e_pin_number, Pin.OUT)
+        self.latch_pin = Pin(config.latch_pin_number, Pin.OUT, Pin.PULL_UP)
+        self.output_disable_pin = Pin(config.output_disable_pin_number, Pin.OUT, Pin.PULL_UP)
+        self.line_select_a_pin = Pin(config.line_select_a_pin_number, Pin.OUT, Pin.PULL_UP)
+        self.line_select_b_pin = Pin(config.line_select_b_pin_number, Pin.OUT, Pin.PULL_UP)
+        self.line_select_c_pin = Pin(config.line_select_c_pin_number, Pin.OUT, Pin.PULL_UP)
+        self.line_select_d_pin = Pin(config.line_select_d_pin_number, Pin.OUT, Pin.PULL_UP)
+        self.line_select_e_pin = Pin(config.line_select_e_pin_number, Pin.OUT, Pin.PULL_UP)
 
         self.line_select_a_pin.off()
         self.line_select_b_pin.off()
@@ -68,12 +68,12 @@ class Hub75Spi:
         self.line_select_d_pin.off()
         self.line_select_e_pin.off()
 
-        self.red1_mosi_pin = Pin(config.red1_pin_number)
-        self.red2_mosi_pin = Pin(config.red2_pin_number)
-        self.green1_mosi_pin = Pin(config.green1_pin_number)
-        self.green2_mosi_pin = Pin(config.green2_pin_number)
-        self.blue1_mosi_pin = Pin(config.blue1_pin_number)
-        self.blue2_mosi_pin = Pin(config.blue2_pin_number)
+        self.red1_mosi_pin = Pin(config.red1_pin_number, Pin.PULL_UP)
+        self.red2_mosi_pin = Pin(config.red2_pin_number, Pin.PULL_UP)
+        self.green1_mosi_pin = Pin(config.green1_pin_number, Pin.PULL_UP)
+        self.green2_mosi_pin = Pin(config.green2_pin_number, Pin.PULL_UP)
+        self.blue1_mosi_pin = Pin(config.blue1_pin_number, Pin.PULL_UP)
+        self.blue2_mosi_pin = Pin(config.blue2_pin_number, Pin.PULL_UP)
 
         self.red1_spi = SoftSPI(baudrate=config.spi_baud_rate, polarity=1, phase=0, sck=Pin(config.clock_pin_number), mosi=self.red1_mosi_pin, miso=Pin(config.spi_miso_pin_number))
         self.red2_spi = SoftSPI(baudrate=config.spi_baud_rate, polarity=1, phase=0, sck=Pin(config.clock_pin_number), mosi=self.red2_mosi_pin, miso=Pin(config.spi_miso_pin_number))
@@ -122,7 +122,7 @@ class Hub75Spi:
         blue1_mosi_pin = self.blue1_mosi_pin
 
         latch_pin = self.latch_pin
-        output_enable_pin = self.output_enable_pin
+        output_disable_pin = self.output_disable_pin
         line_select_a_pin = self.line_select_a_pin
         line_select_b_pin = self.line_select_b_pin
         line_select_c_pin = self.line_select_c_pin
@@ -141,7 +141,7 @@ class Hub75Spi:
             # shift in data
             red1_spi.write(red_matrix_data[row][start:end])
             red1_mosi_pin.off()
-            output_enable_pin.on() # disable
+            output_disable_pin.on()
 
             line_select_a_pin.value(row & 1)
             line_select_b_pin.value(row & 2)
@@ -150,23 +150,23 @@ class Hub75Spi:
 
             latch_pin.on()
             latch_pin.off()
-            output_enable_pin.off() # enable
+            output_disable_pin.off()
 
             # shift in data
             green1_spi.write(green_matrix_data[row][start:end])
             green1_mosi_pin.off()
-            output_enable_pin.on() # disable
+            output_disable_pin.on()
             latch_pin.on()
             latch_pin.off()
-            output_enable_pin.off() # enable
+            output_disable_pin.off()
 
             # shift in data
             blue1_spi.write(blue_matrix_data[row][start:end])
             blue1_mosi_pin.off()
-            output_enable_pin.on() # disable
+            output_disable_pin.on()
             latch_pin.on()
             latch_pin.off()
-            output_enable_pin.off() # enable
+            output_disable_pin.off()
 
             # second half of the display
             row_half = row + half_row_size
@@ -174,28 +174,21 @@ class Hub75Spi:
             # shift in data
             red2_spi.write(red_matrix_data[row_half][start:end])
             red2_mosi_pin.off()
-            output_enable_pin.on() # disable
+            output_disable_pin.on()
             latch_pin.on()
             latch_pin.off()
-            output_enable_pin.off() # enable
+            output_disable_pin.off()
 
             green2_spi.write(green_matrix_data[row_half][start:end])
             green2_mosi_pin.off()
-            output_enable_pin.on() # disable
+            output_disable_pin.on()
             latch_pin.on()
             latch_pin.off()
-            output_enable_pin.off() # enable
+            output_disable_pin.off()
 
             blue2_spi.write(blue_matrix_data[row_half][start:end])
             blue2_mosi_pin.off()
-            output_enable_pin.on() # disable
+            output_disable_pin.on()
             latch_pin.on()
             latch_pin.off()
-            output_enable_pin.off() # enable
-
-        # flush out last blue line
-        blue2_spi.write(bytearray(self.matrix_data.col_bytes))
-        output_enable_pin.on()
-        latch_pin.on()
-        latch_pin.off()
-        output_enable_pin.off() # enable
+            output_disable_pin.off()

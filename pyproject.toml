@@ -9,6 +9,8 @@ packages = [{include = "src", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+pillow = "^11.1.0"
+numpy = "^2.2.3"
 
 
 [tool.poetry.group.dev.dependencies]

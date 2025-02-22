@@ -1,6 +1,7 @@
 import hub75
 import matrixdata
 from logo import logo
+from animation import create_firework_animation as create_animation
 from chars import sequence
 from time import time_ns, sleep_ms
 
@@ -13,11 +14,7 @@ config.illumination_time_microseconds = 0
 matrix = matrixdata.MatrixData(ROW_SIZE, COL_SIZE, BUFFER_SIZE)
 hub75spi = hub75.Hub75Spi(matrix, config)
 
-matrix.clear_all_bytes()
-
-shadow = matrixdata.MatrixData(ROW_SIZE, COL_SIZE, COL_SIZE)
-shadow.clear_all_bytes()
-shadow.set_pixels(0, 16, logo)
+animation = create_animation()
 
 def printat(row, col, char, color):
     for i in range(12):
@@ -68,9 +65,10 @@ if __name__ == "__main__":
         prog_start = time_ns()
         while offset < BUFFER_SIZE - COL_SIZE:
             hub75spi.display_data(offset, matrixes [offset % 8])
+            sleep_ms(1)
+            hub75spi.display_data(0, animation[offset % len(animation)])
+            sleep_ms(10)
             hub75spi.display_data(offset, matrixes [offset % 8])
-            hub75spi.matrix_data = shadow
-            hub75spi.display_data(0, shadow)
             sleep_ms(10)
             offset += 1
         prog_end = time_ns()
