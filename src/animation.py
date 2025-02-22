@@ -14,9 +14,10 @@ def create_firework_animation():
     Colors used:
     - 1 (Blue) for the initial rocket
     - 4 (Red), 2 (Green), 1 (Blue), 6 (Yellow), 7 (White) for explosion particles
+    Particles are drawn as 2x2 pixel squares for better visibility
     """
     animation = []
-    matrix_width = 48
+    matrix_width = 64
     matrix_height = 32
     
     # Launch phase (frames 0-7)
@@ -54,10 +55,16 @@ def create_firework_animation():
             p['y'] += p['dy']
             p['dy'] += 0.1  # Gravity effect
             
-            # Draw particle if in bounds
-            x, y = int(p['x']) + 16, int(p['y'])  # Add 16 to center horizontally
-            if 0 <= x < matrix_width and 0 <= y < matrix_height:
-                matrix.set_pixel_value(y, x, p['color'])
+            # Draw particle as 2x2 square if in bounds
+            base_x, base_y = int(p['x']) + 16, int(p['y'])  # Add 16 to center horizontally
+            
+            # Draw 2x2 pixel square for each particle
+            for offset_y in range(2):
+                for offset_x in range(2):
+                    x = base_x + offset_x
+                    y = base_y + offset_y
+                    if 0 <= x < matrix_width and 0 <= y < matrix_height:
+                        matrix.set_pixel_value(y, x, p['color'])
         
         animation.append(matrix)
     
