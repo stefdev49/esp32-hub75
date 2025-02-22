@@ -67,11 +67,10 @@ if __name__ == "__main__":
         offset = 0
         prog_start = time_ns()
         while offset < BUFFER_SIZE - COL_SIZE:
-            hub75spi.matrix_data = matrixes [offset % 8]
-            hub75spi.display_data(offset)
-            hub75spi.display_data(offset)
+            hub75spi.display_data(offset, matrixes [offset % 8])
+            hub75spi.display_data(offset, matrixes [offset % 8])
             hub75spi.matrix_data = shadow
-            hub75spi.display_data(0)
+            hub75spi.display_data(0, shadow)
             sleep_ms(10)
             offset += 1
         prog_end = time_ns()
