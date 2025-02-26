@@ -100,6 +100,7 @@ class Hub75Spi:
         self.line_select_c_pin.value(row & 4)
         self.line_select_d_pin.value(row & 8)
 
+    @micropython.native
     def display_data(self, offset, matrix_data):
         '''
         Write pixel data to LED matrix.
