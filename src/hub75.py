@@ -109,7 +109,7 @@ class Hub75Spi:
         None.
         '''
         start = offset // 8
-        end = start + self.matrix_data.col_bytes
+        end = start + matrix_data.col_bytes
         red_matrix_data = matrix_data.red_matrix_data
         green_matrix_data = matrix_data.green_matrix_data
         blue_matrix_data = matrix_data.blue_matrix_data
@@ -135,9 +135,7 @@ class Hub75Spi:
         green2_mosi_pin = self.green2_mosi_pin
         blue2_mosi_pin = self.blue2_mosi_pin
 
-        half_row_size = self.half_row_size
-
-        for row in range(self.half_row_size):
+        for row in range(16):
             # shift in data
             red1_spi.write(red_matrix_data[row][start:end])
             red1_mosi_pin.off()
@@ -169,7 +167,7 @@ class Hub75Spi:
             output_disable_pin.off()
 
             # second half of the display
-            row_half = row + half_row_size
+            row_half = row + 16
 
             # shift in data
             red2_spi.write(red_matrix_data[row_half][start:end])
