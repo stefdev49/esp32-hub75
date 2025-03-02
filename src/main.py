@@ -28,11 +28,10 @@ matrix.clear_all_bytes()
 def message_loop():
     # Calcule la largeur totale du message en pixels
     pixels = len(sequence)*7
-    scroll = COL_SIZE
+    scroll = 0 # COL_SIZE
     matrix.clear_all_bytes()
     # Boucle d'animation jusqu'à ce que le message soit sorti de l'écran
     while scroll != - pixels:
-        start = time_ns()
         # Pour chaque caractère de la séquence
         for i in range(0, len(sequence)):
             # Vérifie si le caractère est visible à l'écran
@@ -40,11 +39,11 @@ def message_loop():
                 # Affiche le caractère à la position calculée
                 printat(8, scroll+i*7, sequence[i], 255)
         scroll -= 1
-        end = time_ns()
-        # Mesure le temps de rendu en millisecondes
-        print(f"durée = {(end - start)/(1_000_000)} ms")
 
 if __name__ == "__main__":
     timer = Timer(0)
     timer.init(period=20, mode=Timer.PERIODIC, callback=hub75spi.display_data)
+    start = time_ns()
     message_loop()
+    end = time_ns()
+    print(f"durée = {(end - start)/(1_000_000)} ms")
