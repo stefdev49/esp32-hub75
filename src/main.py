@@ -32,9 +32,9 @@ def message_loop():
     matrix.clear_all_bytes()
     # Boucle d'animation jusqu'à ce que le message soit sorti de l'écran
     while scroll != - pixels:
-        for i, char in enumerate(sequence):
-            if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
-                printat(8, scroll+i*7, char, 255)
+        [printat(8, scroll+i*7, char, 255) 
+        for i, char in enumerate(sequence) 
+        if scroll+i*7 < COL_SIZE or scroll+i*7 > 0]
         scroll -= 1
 
 if __name__ == "__main__":
