@@ -2,7 +2,7 @@ import hub75
 import matrixdata
 from time import time_ns
 from letters import *
-import asyncio
+from machine import Timer
 
 ROW_SIZE = 32
 COL_SIZE = 64
@@ -25,7 +25,7 @@ sequence = [char_b, char_o, char_n, char_n, char_e, char_space, char_a, char_n, 
 matrix.clear_all_bytes()
 
 
-async def message_loop():
+def message_loop():
     # Calcule la largeur totale du message en pixels
     pixels = len(sequence)*7
     scroll = COL_SIZE
@@ -39,30 +39,12 @@ async def message_loop():
             if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
                 # Affiche le caractère à la position calculée
                 printat(8, scroll+i*7, sequence[i], 255)
-                await asyncio.sleep(0.01)
         scroll -= 1
         end = time_ns()
         # Mesure le temps de rendu en millisecondes
         print(f"durée = {(end - start)/(1_000_000)} ms")
 
-async def refresh_display():
-    # Boucle infinie de rafraîchissement
-    # asyncio permet son exécution en parallèle avec message_loop
-    while True:
-        # Attend que l'affichage soit mis à jour
-        # await permet de céder le contrôle à d'autres coroutines pendant l'attente
-        hub75spi.display_data()
-        await asyncio.sleep(0.01)
-
-async def main():
-    # Crée deux tâches asynchrones qui s'exécuteront en parallèle
-
-    # Attend que les deux tâches soient terminées
-    await asyncio.gather(
-        refresh_display(),
-        message_loop()
-    )
-
-# Point d'entrée du programme
-# asyncio.run crée une nouvelle boucle d'événements et exécute la coroutine main
-asyncio.run(main())
+if __name__ == "__main__":
+    timer = Timer(0)
+    timer.init(period=20, mode=Timer.PERIODIC, callback=hub75spi.display_data)
+    message_loop()

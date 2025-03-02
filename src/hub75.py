@@ -219,7 +219,7 @@ class Hub75Spi:
         output_enable_pin.off() # enable
 
     @micropython.native
-    def display_data(self):
+    def display_data(self, t):
         '''
         Write pixel data to LED matrix.
 
