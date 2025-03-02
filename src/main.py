@@ -33,11 +33,9 @@ def message_loop():
     # Boucle d'animation jusqu'à ce que le message soit sorti de l'écran
     while scroll != - pixels:
         # Pour chaque caractère de la séquence
-        for i in range(0, len(sequence)):
-            # Vérifie si le caractère est visible à l'écran
-            if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
-                # Affiche le caractère à la position calculée
-                printat(8, scroll+i*7, sequence[i], 255)
+        [printat(8, scroll+i*7, sequence[i], 255)
+         for i in range(len(sequence)) 
+         if scroll+i*7 < COL_SIZE or scroll+i*7 > 0]
         scroll -= 1
 
 if __name__ == "__main__":
