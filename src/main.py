@@ -59,21 +59,26 @@ def prepare_buffers(matrixes):
 if __name__ == "__main__":
     matrixes = []
     prepare_buffers(matrixes)
+    anim_len = len(animation)
 
     while True:
         offset = 0
         prog_start = time_ns()
         while offset < BUFFER_SIZE - COL_SIZE:
-            hub75spi.display_data(offset, matrixes [offset % 8])
+            anim_frame = animation[offset % anim_len]
+            message_frame = matrixes[offset % 8]
+
+            hub75spi.display_data(offset,message_frame)
             sleep_ms(1)
-            hub75spi.display_data(0, animation[offset % len(animation)])
+            hub75spi.display_data(0, anim_frame)
             sleep_ms(1)
-            hub75spi.display_data(offset, matrixes [offset % 8])
+            hub75spi.display_data(offset, message_frame)
             sleep_ms(1)
-            hub75spi.display_data(0, animation[offset % len(animation)])
+            hub75spi.display_data(0, anim_frame)
             sleep_ms(1)
-            hub75spi.display_data(offset, matrixes [offset % 8])
+            hub75spi.display_data(offset, message_frame)
             sleep_ms(1)
+            
             offset += 1
         prog_end = time_ns()
         print(f"durée totale = {(prog_end - prog_start)/(1_000_000)} ms")
