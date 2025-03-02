@@ -1,6 +1,6 @@
 from time import time_ns
 import gc
-from comprehension import message_loop_generator, message_loop, message_loop_comprehension, message_loop_enumerate, message_loop_combo, message_loop_generator
+from alternatives import message_loop_generator, message_loop, message_loop_comprehension, message_loop_enumerate, message_loop_combo, message_loop_generator
 
 def test_message_loop_performance():
     # Number of iterations for timing

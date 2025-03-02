@@ -1,5 +1,5 @@
 from line_profiler import LineProfiler
-from comprehension import message_loop, message_loop_comprehension, message_loop_enumerate, printat, message_loop_opt
+from alternatives import message_loop, message_loop_comprehension, message_loop_enumerate, printat, message_loop_opt
 from matrixdata import MatrixData
 
 def run_line_profiler():

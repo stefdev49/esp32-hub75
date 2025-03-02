@@ -1,9 +1,9 @@
 import timeit
-from comprehension import message_loop, message_loop_comprehension, message_loop_enumerate, message_loop_combo
+from alternatives import message_loop, message_loop_comprehension, message_loop_enumerate, message_loop_combo
 
 def test_message_loop_performance():
     # Number of iterations for timing
-    number = 100
+    number = 50
     
     # Time the original implementation
     print("Timing message_loop() performance...")

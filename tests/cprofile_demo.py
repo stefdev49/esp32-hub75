@@ -1,13 +1,13 @@
 import cProfile
 import pstats
-from comprehension import message_loop, message_loop_comprehension, message_loop_enumerate
+from alternatives import message_loop, message_loop_comprehension, message_loop_enumerate
 
 def run_profiler():
     # Profile original loop
     profiler = cProfile.Profile()
     print("Profiling message_loop() performance...")
     profiler.enable()
-    for _ in range(100):
+    for _ in range(50):
         message_loop()
     profiler.disable()
     stats = pstats.Stats(profiler).sort_stats('cumulative')
@@ -18,7 +18,7 @@ def run_profiler():
     profiler = cProfile.Profile()
     print("Profiling message_loop_comprehension() performance...")
     profiler.enable()
-    for _ in range(100):
+    for _ in range(50):
         message_loop_comprehension()
     profiler.disable()
     stats = pstats.Stats(profiler).sort_stats('cumulative')
@@ -29,7 +29,7 @@ def run_profiler():
     profiler = cProfile.Profile()
     print("Profiling message_loop_enumerate() performance...")
     profiler.enable()
-    for _ in range(100):
+    for _ in range(50):
         message_loop_enumerate()
     profiler.disable()
     stats = pstats.Stats(profiler).sort_stats('cumulative')
