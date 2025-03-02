@@ -39,6 +39,7 @@ async def message_loop():
             if scroll+i*7 < COL_SIZE or scroll+i*7 > 0:
                 # Affiche le caractère à la position calculée
                 printat(8, scroll+i*7, sequence[i], 255)
+                await asyncio.sleep(0.01)
         scroll -= 1
         end = time_ns()
         # Mesure le temps de rendu en millisecondes
@@ -51,6 +52,7 @@ async def refresh_display():
         # Attend que l'affichage soit mis à jour
         # await permet de céder le contrôle à d'autres coroutines pendant l'attente
         hub75spi.display_data()
+        await asyncio.sleep(0.01)
 
 async def main():
     # Crée deux tâches asynchrones qui s'exécuteront en parallèle
