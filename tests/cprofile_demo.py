@@ -1,11 +1,11 @@
 import cProfile
 import pstats
-from comprehension import message_loop, message_loop_comprehension, message_loop_opt
+from comprehension import message_loop, message_loop_comprehension, message_loop_enumerate
 
 def run_profiler():
-    """Run performance comparison of the three message loop implementations."""
     # Profile original loop
     profiler = cProfile.Profile()
+    print("Profiling message_loop() performance...")
     profiler.enable()
     for _ in range(100):
         message_loop()
@@ -16,6 +16,7 @@ def run_profiler():
 
     # Profile comprehension loop
     profiler = cProfile.Profile()
+    print("Profiling message_loop_comprehension() performance...")
     profiler.enable()
     for _ in range(100):
         message_loop_comprehension()
@@ -24,14 +25,15 @@ def run_profiler():
     print("\nList comprehension message_loop_comprehension() performance:")
     stats.print_stats(10)
 
-    # Profile optimized loop
+    # Profile enumerate loop
     profiler = cProfile.Profile()
+    print("Profiling message_loop_enumerate() performance...")
     profiler.enable()
     for _ in range(100):
-        message_loop_opt()
+        message_loop_enumerate()
     profiler.disable()
     stats = pstats.Stats(profiler).sort_stats('cumulative')
-    print("\nOptimized message_loop_opt() performance:")
+    print("\nOptimized message_loop_enumerate() performance:")
     stats.print_stats(10)
 
 if __name__ == "__main__":
